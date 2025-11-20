@@ -72,7 +72,7 @@ function initAPICheckboxes() {
     normaldiv.className = 'grid grid-cols-2 gap-2';
     const normalTitle = document.createElement('div');
     normalTitle.className = 'api-group-title';
-    normalTitle.textContent = '普通資源';
+    normalTitle.textContent = '普通资源';
     normaldiv.appendChild(normalTitle);
 
     // 创建普通API源的复选框
@@ -120,7 +120,7 @@ function addAdultAPI() {
         adultdiv.className = 'grid grid-cols-2 gap-2';
         const adultTitle = document.createElement('div');
         adultTitle.className = 'api-group-title adult';
-        adultTitle.innerHTML = `黃色資源采集站 <span class="adult-warning">
+        adultTitle.innerHTML = `黄色资源采集站 <span class="adult-warning">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
@@ -180,7 +180,7 @@ function checkAdultAPIsSelected() {
 
         // 修改描述文字
         if (filterDescription) {
-            filterDescription.innerHTML = '<strong class="text-pink-300">選中黃色資源站時無法啟用此過濾</strong>';
+            filterDescription.innerHTML = '<strong class="text-pink-300">选中黄色资源站时无法启用此过滤</strong>';
         }
 
         // 移除提示信息（如果存在）
@@ -195,7 +195,7 @@ function checkAdultAPIsSelected() {
 
         // 恢复原来的描述文字
         if (filterDescription) {
-            filterDescription.innerHTML = '過濾"倫理片"等黃色內容';
+            filterDescription.innerHTML = '过滤"伦理片"等黄色内容';
         }
 
         // 移除提示信息
@@ -212,7 +212,7 @@ function renderCustomAPIsList() {
     if (!container) return;
 
     if (customAPIs.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500 text-center my-2">未添加自定義API</p>';
+        container.innerHTML = '<p class="text-xs text-gray-500 text-center my-2">未添加自定义API</p>';
         return;
     }
 
@@ -283,11 +283,11 @@ function updateCustomApi(index) {
     const detail = detailInput ? detailInput.value.trim() : '';
     const isAdult = isAdultInput ? isAdultInput.checked : false;
     if (!name || !url) {
-        showToast('請輸入API名稱和鏈接', 'warning');
+        showToast('请输入API名称和链接', 'warning');
         return;
     }
     if (!/^https?:\/\/.+/.test(url)) {
-        showToast('API鏈接格式不正確，需以http://或https://開頭', 'warning');
+        showToast('API链接格式不正确，需以http://或https://开头', 'warning');
         return;
     }
     if (url.endsWith('/')) url = url.slice(0, -1);
@@ -302,7 +302,7 @@ function updateCustomApi(index) {
     if (detailInput) detailInput.value = '';
     if (isAdultInput) isAdultInput.checked = false;
     document.getElementById('addCustomApiForm').classList.add('hidden');
-    showToast('已更新自定義API: ' + name, 'success');
+    showToast('已更新自定义API: ' + name, 'success');
 }
 
 // 取消编辑自定义API
@@ -412,11 +412,11 @@ function addCustomApi() {
     const detail = detailInput ? detailInput.value.trim() : '';
     const isAdult = isAdultInput ? isAdultInput.checked : false;
     if (!name || !url) {
-        showToast('請輸入API名稱和鏈接', 'warning');
+        showToast('请输入API名称和链接', 'warning');
         return;
     }
     if (!/^https?:\/\/.+/.test(url)) {
-        showToast('API鏈接格式不正確，需以http://或https://開頭', 'warning');
+        showToast('API链接格式不正确，需以http://或https://开头', 'warning');
         return;
     }
     if (url.endsWith('/')) {
@@ -438,7 +438,7 @@ function addCustomApi() {
     if (detailInput) detailInput.value = '';
     if (isAdultInput) isAdultInput.checked = false;
     document.getElementById('addCustomApiForm').classList.add('hidden');
-    showToast('已添加自定義API: ' + name, 'success');
+    showToast('已添加自定义API: ' + name, 'success');
 }
 
 // 移除自定义API
@@ -477,7 +477,7 @@ function removeCustomApi(index) {
     // 重新检查成人API选中状态
     checkAdultAPIsSelected();
 
-    showToast('已移除自定義API: ' + apiName, 'info');
+    showToast('已移除自定义API: ' + apiName, 'info');
 }
 
 function toggleSettings(e) {
@@ -584,11 +584,11 @@ function resetSearchArea() {
     try {
         window.history.pushState(
             {},
-            `coolmanTV - 免費在線視頻搜索與觀看平台`,
+            `coolmanTV - 免费在线视频搜索与观看平台`,
             `/`
         );
         // 更新页面标题
-        document.title = `coolmanTV - 免費在線視頻搜索與觀看平台`;
+        document.title = `coolmanTV - 免费在线视频搜索与观看平台`;
     } catch (e) {
         console.error('更新浏览器历史失败:', e);
     }
@@ -625,12 +625,12 @@ async function search() {
     const query = document.getElementById('searchInput').value.trim();
 
     if (!query) {
-        showToast('請輸入搜索內容', 'info');
+        showToast('请输入搜索内容', 'info');
         return;
     }
 
     if (selectedAPIs.length === 0) {
-        showToast('請至少選擇一個API源', 'warning');
+        showToast('请至少选择一个API源', 'warning');
         return;
     }
 
@@ -640,13 +640,10 @@ async function search() {
         // 保存搜索历史
         saveSearchHistory(query);
 
-        // 将查询转换为简体中文用于API请求
-        const apiQuery = ZhConvert.toSimplified(query);
-
         // 从所有选中的API源搜索
         let allResults = [];
         const searchPromises = selectedAPIs.map(apiId =>
-            searchByAPIAndKeyWord(apiId, apiQuery)
+            searchByAPIAndKeyWord(apiId, query)
         );
 
         // 等待所有搜索请求完成
@@ -696,8 +693,8 @@ async function search() {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                               d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="mt-2 text-lg font-medium text-gray-400">沒有找到匹配的結果</h3>
-                    <p class="mt-1 text-sm text-gray-500">請嘗試其他關鍵詞或更換數據源</p>
+                    <h3 class="mt-2 text-lg font-medium text-gray-400">没有找到匹配的结果</h3>
+                    <p class="mt-1 text-sm text-gray-500">请尝试其他关键词或更换数据源</p>
                 </div>
             `;
             hideLoading();
@@ -731,28 +728,25 @@ async function search() {
             });
         }
 
-        // 转换为繁体中文用于显示
-        const tcName = ZhConvert.toTraditional(item.vod_name || '');
-        const tcType = ZhConvert.toTraditional(item.type_name || '');
-        const tcRemarks = ZhConvert.toTraditional(item.vod_remarks || '暫無介紹');
+        // 添加XSS保护，使用textContent和属性转义
+        const safeResults = allResults.map(item => {
+            const safeId = item.vod_id ? item.vod_id.toString().replace(/[^\w-]/g, '') : '';
+            const safeName = (item.vod_name || '').toString()
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+            const sourceInfo = item.source_name ?
+                `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
+            const sourceCode = item.source_code || '';
 
-        const safeId = item.vod_id ? item.vod_id.toString().replace(/[^\w-]/g, '') : '';
-        const safeName = tcName.toString()
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-        const sourceInfo = item.source_name ?
-            `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
-        const sourceCode = item.source_code || '';
+            // 添加API URL属性，用于详情获取
+            const apiUrlAttr = item.api_url ?
+                `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
 
-        // 添加API URL属性，用于详情获取
-        const apiUrlAttr = item.api_url ?
-            `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
+            // 修改为水平卡片布局，图片在左侧，文本在右侧，并优化样式
+            const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
 
-        // 修改为水平卡片布局，图片在左侧，文本在右侧，并优化样式
-        const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
-
-        return `
+            return `
                 <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md" 
                      onclick="showDetails('${safeId}','${safeName}','${sourceCode}')" ${apiUrlAttr}>
                     <div class="flex h-full">
@@ -760,7 +754,7 @@ async function search() {
                         <div class="relative flex-shrink-0 search-card-img-container">
                             <img src="${item.vod_pic}" alt="${safeName}" 
                                  class="h-full w-full object-cover transition-transform hover:scale-110" 
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=無封面'; this.classList.add('object-contain');" 
+                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');" 
                                  loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
                         </div>` : ''}
@@ -770,17 +764,17 @@ async function search() {
                                 <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
                                 
                                 <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
-                                    ${tcType.toString().replace(/</g, '&lt;') ?
-                `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
-                                          ${tcType.toString().replace(/</g, '&lt;')}
+                                    ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
+                    `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
+                                          ${(item.type_name || '').toString().replace(/</g, '&lt;')}
                                       </span>` : ''}
                                     ${(item.vod_year || '') ?
-                `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
+                    `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
                                           ${item.vod_year}
                                       </span>` : ''}
                                 </div>
                                 <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
-                                    ${tcRemarks.toString().replace(/</g, '&lt;')}
+                                    ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
                                 </p>
                             </div>
                             
@@ -801,19 +795,19 @@ async function search() {
                     </div>
                 </div>
             `;
-    }).join('');
+        }).join('');
 
-    resultsDiv.innerHTML = safeResults;
-} catch (error) {
-    console.error('搜索错误:', error);
-    if (error.name === 'AbortError') {
-        showToast('搜索请求超时，请检查网络连接', 'error');
-    } else {
-        showToast('搜索请求失败，请稍后重试', 'error');
+        resultsDiv.innerHTML = safeResults;
+    } catch (error) {
+        console.error('搜索错误:', error);
+        if (error.name === 'AbortError') {
+            showToast('搜索请求超时，请检查网络连接', 'error');
+        } else {
+            showToast('搜索请求失败，请稍后重试', 'error');
+        }
+    } finally {
+        hideLoading();
     }
-} finally {
-    hideLoading();
-}
 }
 
 // 切换清空按钮的显示状态
