@@ -584,11 +584,11 @@ function resetSearchArea() {
     try {
         window.history.pushState(
             {},
-            `LibreTV - 免费在线视频搜索与观看平台`,
+            `coolmanTV - 免费在线视频搜索与观看平台`,
             `/`
         );
         // 更新页面标题
-        document.title = `LibreTV - 免费在线视频搜索与观看平台`;
+        document.title = `coolmanTV - 免费在线视频搜索与观看平台`;
     } catch (e) {
         console.error('更新浏览器历史失败:', e);
     }
@@ -642,7 +642,7 @@ async function search() {
 
         // 从所有选中的API源搜索
         let allResults = [];
-        const searchPromises = selectedAPIs.map(apiId => 
+        const searchPromises = selectedAPIs.map(apiId =>
             searchByAPIAndKeyWord(apiId, query)
         );
 
@@ -661,7 +661,7 @@ async function search() {
             // 首先按照视频名称排序
             const nameCompare = (a.vod_name || '').localeCompare(b.vod_name || '');
             if (nameCompare !== 0) return nameCompare;
-            
+
             // 如果名称相同，则按照来源排序
             return (a.source_name || '').localeCompare(b.source_name || '');
         });
@@ -708,11 +708,11 @@ async function search() {
             // 使用HTML5 History API更新URL，不刷新页面
             window.history.pushState(
                 { search: query },
-                `搜索: ${query} - LibreTV`,
+                `搜索: ${query} - coolmanTV`,
                 `/s=${encodedQuery}`
             );
             // 更新页面标题
-            document.title = `搜索: ${query} - LibreTV`;
+            document.title = `搜索: ${query} - coolmanTV`;
         } catch (e) {
             console.error('更新浏览器历史失败:', e);
             // 如果更新URL失败，继续执行搜索
