@@ -11,6 +11,20 @@ let currentVideoTitle = '';
 // 全局变量用于倒序状态
 let episodesReversed = false;
 
+// 繁体转换器实例
+let sc2tcConverter = null;
+
+// 转换文本为繁体
+function convertToTraditional(text) {
+    if (!text || !sc2tcConverter) return text;
+    try {
+        return sc2tcConverter(text);
+    } catch (e) {
+        console.warn('Conversion failed:', e);
+        return text;
+    }
+}
+
 // 页面初始化
 document.addEventListener('DOMContentLoaded', function () {
     // 初始化API复选框
@@ -59,6 +73,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 初始检查成人API选中状态
     setTimeout(checkAdultAPIsSelected, 100);
+
+    // 初始化繁体转换器并转换页面静态内容
+    if (window.OpenCC) {
+        try {
+            sc2tcConverter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+            // 转换整个页面的静态文本
+            if (window.OpenCC.HTMLConverter) {
+                OpenCC.HTMLConverter(sc2tcConverter, document.documentElement, 'zh', 'zh-TW').convert();
+            }
+        } catch (e) {
+            console.error('OpenCC initialization failed:', e);
+        }
+    }
 });
 
 // 初始化API复选框
@@ -731,12 +758,20 @@ async function search() {
         // 添加XSS保护，使用textContent和属性转义
         const safeResults = allResults.map(item => {
             const safeId = item.vod_id ? item.vod_id.toString().replace(/[^\w-]/g, '') : '';
-            const safeName = (item.vod_name || '').toString()
+
+            // 转换为繁体中文
+            const vodName = convertToTraditional((item.vod_name || '').toString());
+            const typeName = convertToTraditional((item.type_name || '').toString());
+            const vodRemarks = convertToTraditional((item.vod_remarks || '暂无介绍').toString());
+            const sourceName = convertToTraditional(item.source_name || '');
+
+            const safeName = vodName
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
-            const sourceInfo = item.source_name ?
-                `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${item.source_name}</span>` : '';
+
+            const sourceInfo = sourceName ?
+                `<span class="bg-[#222] text-xs px-1.5 py-0.5 rounded-full">${sourceName}</span>` : '';
             const sourceCode = item.source_code || '';
 
             // 添加API URL属性，用于详情获取
@@ -764,9 +799,9 @@ async function search() {
                                 <h3 class="font-semibold mb-2 break-words line-clamp-2 ${hasCover ? '' : 'text-center'}" title="${safeName}">${safeName}</h3>
                                 
                                 <div class="flex flex-wrap ${hasCover ? '' : 'justify-center'} gap-1 mb-2">
-                                    ${(item.type_name || '').toString().replace(/</g, '&lt;') ?
+                                    ${typeName.replace(/</g, '&lt;') ?
                     `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-blue-500 text-blue-300">
-                                          ${(item.type_name || '').toString().replace(/</g, '&lt;')}
+                                          ${typeName.replace(/</g, '&lt;')}
                                       </span>` : ''}
                                     ${(item.vod_year || '') ?
                     `<span class="text-xs py-0.5 px-1.5 rounded bg-opacity-20 bg-purple-500 text-purple-300">
@@ -774,7 +809,7 @@ async function search() {
                                       </span>` : ''}
                                 </div>
                                 <p class="text-gray-400 line-clamp-2 overflow-hidden ${hasCover ? '' : 'text-center'} mb-2">
-                                    ${(item.vod_remarks || '暂无介绍').toString().replace(/</g, '&lt;')}
+                                    ${vodRemarks.replace(/</g, '&lt;')}
                                 </p>
                             </div>
                             
@@ -906,18 +941,19 @@ async function showDetails(id, vod_name, sourceCode) {
 
         // 显示来源信息
         const sourceName = data.videoInfo && data.videoInfo.source_name ?
-            ` <span class="text-sm font-normal text-gray-400">(${data.videoInfo.source_name})</span>` : '';
+            ` <span class="text-sm font-normal text-gray-400">(${convertToTraditional(data.videoInfo.source_name)})</span>` : '';
 
         // 不对标题进行截断处理，允许完整显示
-        modalTitle.innerHTML = `<span class="break-words">${vod_name || '未知视频'}</span>${sourceName}`;
-        currentVideoTitle = vod_name || '未知视频';
+        const vodNameTC = convertToTraditional(vod_name || '未知视频');
+        modalTitle.innerHTML = `<span class="break-words">${vodNameTC}</span>${sourceName}`;
+        currentVideoTitle = vodNameTC;
 
         if (data.episodes && data.episodes.length > 0) {
             // 构建详情信息HTML
             let detailInfoHtml = '';
             if (data.videoInfo) {
                 // Prepare description text, strip HTML and trim whitespace
-                const descriptionText = data.videoInfo.desc ? data.videoInfo.desc.replace(/<[^>]+>/g, '').trim() : '';
+                const descriptionText = data.videoInfo.desc ? convertToTraditional(data.videoInfo.desc.replace(/<[^>]+>/g, '').trim()) : '';
 
                 // Check if there's any actual grid content
                 const hasGridContent = data.videoInfo.type || data.videoInfo.year || data.videoInfo.area || data.videoInfo.director || data.videoInfo.actor || data.videoInfo.remarks;
@@ -927,12 +963,12 @@ async function showDetails(id, vod_name, sourceCode) {
                 <div class="modal-detail-info">
                     ${hasGridContent ? `
                     <div class="detail-grid">
-                        ${data.videoInfo.type ? `<div class="detail-item"><span class="detail-label">类型:</span> <span class="detail-value">${data.videoInfo.type}</span></div>` : ''}
+                        ${data.videoInfo.type ? `<div class="detail-item"><span class="detail-label">类型:</span> <span class="detail-value">${convertToTraditional(data.videoInfo.type)}</span></div>` : ''}
                         ${data.videoInfo.year ? `<div class="detail-item"><span class="detail-label">年份:</span> <span class="detail-value">${data.videoInfo.year}</span></div>` : ''}
-                        ${data.videoInfo.area ? `<div class="detail-item"><span class="detail-label">地区:</span> <span class="detail-value">${data.videoInfo.area}</span></div>` : ''}
-                        ${data.videoInfo.director ? `<div class="detail-item"><span class="detail-label">导演:</span> <span class="detail-value">${data.videoInfo.director}</span></div>` : ''}
-                        ${data.videoInfo.actor ? `<div class="detail-item"><span class="detail-label">主演:</span> <span class="detail-value">${data.videoInfo.actor}</span></div>` : ''}
-                        ${data.videoInfo.remarks ? `<div class="detail-item"><span class="detail-label">备注:</span> <span class="detail-value">${data.videoInfo.remarks}</span></div>` : ''}
+                        ${data.videoInfo.area ? `<div class="detail-item"><span class="detail-label">地区:</span> <span class="detail-value">${convertToTraditional(data.videoInfo.area)}</span></div>` : ''}
+                        ${data.videoInfo.director ? `<div class="detail-item"><span class="detail-label">导演:</span> <span class="detail-value">${convertToTraditional(data.videoInfo.director)}</span></div>` : ''}
+                        ${data.videoInfo.actor ? `<div class="detail-item"><span class="detail-label">主演:</span> <span class="detail-value">${convertToTraditional(data.videoInfo.actor)}</span></div>` : ''}
+                        ${data.videoInfo.remarks ? `<div class="detail-item"><span class="detail-label">备注:</span> <span class="detail-value">${convertToTraditional(data.videoInfo.remarks)}</span></div>` : ''}
                     </div>` : ''}
                     ${descriptionText ? `
                     <div class="detail-desc">
